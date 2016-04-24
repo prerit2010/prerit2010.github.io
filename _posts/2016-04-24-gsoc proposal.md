@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "GSoC Proposal 2016"
-date:   2016-04-25
+date:   2016-04-24
 ---
 
 Result-aggregation server for the installation-test scripts 
