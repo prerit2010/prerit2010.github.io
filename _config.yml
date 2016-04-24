@@ -1,0 +1,28 @@
+title: Long Haul
+description: Long Form Jekyll theme built with SASS / COMPASS / SUSY
+
+url: http://prerit2010.github.com
+baseurl: ""
+paginate_path: "blog/page:num/"
+permalink: blog/:title/
+
+markdown: redcarpet
+highlighter: pygments
+gems: [jekyll-paginate]
+paginate: 5
+
+navigation:
+ - title: Home
+   url: /index.html
+ - title: About
+   url: /about
+ - title: Contact
+   url: /contact
+
+social:
+   github: prerit2010
+   twitter: prerit2010
+   facebook: prerit2013
+   email: prerit2010@gmail.com
+
+google_analytics: ""
