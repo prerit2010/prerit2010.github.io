@@ -6,7 +6,7 @@ title: Contact Prerit
 <div class="container" id="contact">
   <h1 class="pageTitle">Contact Me</h1>
     <p>If you have questions about the theme feel free to <a href="mailto:prerit2010@gmail.com">email me</a> Enjoy!</p>
-  </div>
+  
   <!-- <form action="http://formspree.io/brimaidesigns@gmail.com" method="POST">
     <label for="name">Name</label>    
     <input type="text" id="name" name="name" class="full-width"><br>
