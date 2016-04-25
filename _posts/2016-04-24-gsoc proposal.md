@@ -45,6 +45,8 @@ The installation-test script needs to be modified to retrieve some useful inform
   
 All of this information can be retrieved by using a library in python called `Platform`, code of which I wrote in my [demo](https://github.com/prerit2010/DemoAPI) application. The code snippet :
 
+{::options parse_block_html="true" /}
+<div class="mypadding">
 ```python 
 import platform 
  
@@ -56,7 +58,7 @@ uname = platform.uname()
 version = platform.version() 
 python_version = platform.python_version() 
 ```
-<
+</div>
 
 Sample of output generated in case of Ubuntu :
 
@@ -80,6 +82,8 @@ Some or most of these information are being retrieved in the [installation-test-
 * **Successful Installs** list is already provided by the script. A list `successes` contains both checker and the version. Server can just grab the full name by `checker.full_name()` and `version` of the successfully installed packages.
 * **Failed Checks** list is also provided by the script with the name of the package, error description and also the cause for some cases. e.g. :
 
+{::options parse_block_html="true" /}
+<div class="mypadding">
 ```
 check for IPython script (ipython) failed: ( Name : IPython script (ipython) )
   errors finding IPython script (ipython) version  <-- Description
@@ -87,6 +91,7 @@ causes:
   check for IPython script (ipython) failed:
     could not find 'ipython' executable  <-- Cause
 ```
+</div>
 
 ### Other information 
 
@@ -113,7 +118,8 @@ This would involve :
 
 * **Modification of the installation-test-scrips** and giving the user an option to send the data to the server by making a [POST](https://en.wikipedia.org/wiki/POST_(HTTP)) request to the API endpoint with payload of all the information collected. Code Snippet : 
 
-
+{::options parse_block_html="true" /}
+<div class="mypadding">
 ```python
 try:
   import httplib as http_client
@@ -136,6 +142,7 @@ conn.request("POST", os_end_point, data, headers=headers)
 response = conn.getresponse()
 conn.close()
 ```
+</div>
 
 * This API will follow the [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) standard, and all the data shall be sent in [JSON](http://www.json.org/) to the API.  
 * Setting up the **Database**. As mentioned in the description of the idea, [SQLite](https://www.sqlite.org/) is preferred, but it suffers some problems in case 40-50 people send the data simultaneously. After going through the comparison given [here](https://www.digitalocean.com/community/tutorials/sqlite-vs-mysql-vs-postgresql-a-comparison-of-relational-database-management-systems), I would personally prefer [MySQL](https://www.mysql.com/) or [PostgreSQL](http://www.postgresql.org/) in this project. But that can be decided later as per the discussion with mentors. All interactions with the database shall be done using **SQLAlchemy** and **Alembic**.
