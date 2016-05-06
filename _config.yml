@@ -17,14 +17,13 @@ author: 'prerit2010'
 nickname: 'Prerit Garg'
 bio: 'A programmer and Thinker!'
 location: 'Noida, India'
-url: http://prerit2010.github.com
 image: 'assets/images/prerit.png'
 
 # short_url: 'prerit2010.github.io'
 google_analytics: 	
 disqus: username
 # edit baseurl to simply '/' if using as your personal page (instead of a project page)
-baseurl: "/"
+baseurl: /
 
 # Permalinks
 permalink: /:title
