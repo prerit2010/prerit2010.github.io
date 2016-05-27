@@ -37,6 +37,7 @@
         <span class="k">return</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
 </code></pre>
 </div>
+
 <p>So, I’ll have to format the data and make it appropriate to be sent to server.</p>
 
 <p>As per the discussion with my mentor <strong>@pbanaszkiewicz</strong>, I will get back to installation scripts a litter later. Firstly I’ll be creating the server and API, it will help me in understanding the format and requirement of data which is to be prepared later during modification of installation test scripts.</p>
