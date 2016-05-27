@@ -12,6 +12,53 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>Beginning the GSoC Project</title>
+	  <link>//Beginning-the-GSoC-Project</link>
+	  <author>prerit2010</author>
+	  <pubDate>2016-05-26T15:48:00+05:30</pubDate>
+	  <guid>//Beginning-the-GSoC-Project</guid>
+	  <description><![CDATA[
+	     <p>After 2 long exhausting weeks of exams, I am finally done with my graduation :). And now I have buckled up to code the summer away with Software Carpentry (NumFocus).</p>
+
+<p>As I had figured out earlier, the installation data about the packages, like name and version is easily available in the <a href="https://github.com/wking/swc-setup-installation-test">installation test scripts</a> in the form of a list. But this case is only for successful installs. For failures I don’t have a direct list, rather I have a list of messages that are displayed by the script to the users for each failure, which have been designed something like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_url</span><span class="p">()</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s">'check for {0} failed:'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">checker</span><span class="o">.</span><span class="n">full_name</span><span class="p">()),</span>
+            <span class="s">'  '</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">,</span>
+            <span class="s">'  For instructions on installing an up-to-date version, see'</span><span class="p">,</span>
+            <span class="s">'  '</span> <span class="o">+</span> <span class="n">url</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">causes</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">'  causes:'</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">cause</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">causes</span><span class="p">:</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="s">'  '</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">cause</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
+        <span class="k">return</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+</code></pre>
+</div>
+<p>So, I’ll have to format the data and make it appropriate to be sent to server.</p>
+
+<p>As per the discussion with my mentor <strong>@pbanaszkiewicz</strong>, I will get back to installation scripts a litter later. Firstly I’ll be creating the server and API, it will help me in understanding the format and requirement of data which is to be prepared later during modification of installation test scripts.</p>
+
+<p>So, I have begun working on the server side, the code of which resides in the github repository <a href="https://github.com/prerit2010/Result-aggregation-server">Result-aggregation-server</a>. API is to be built using python’s micro web framwork flask. Following are the basic requirements of this API:</p>
+
+<ul>
+  <li><a href="http://flask.pocoo.org/">Flask</a></li>
+  <li><a href="http://www.sqlalchemy.org/">SQLAlchemy</a></li>
+  <li><a href="https://www.sqlite.org/">SQLite</a></li>
+  <li><a href="https://flask-migrate.readthedocs.io/en/latest/">Flask-Migrate</a></li>
+</ul>
+
+<p>I have created an endpoint <strong>installation_data</strong> which sends the user’s system information, the installed packages by the user, and failed packages. The installation script should make a POST request with headers : <strong>“Content-Type : application/json”</strong> to this end point. Currently there are 3 tables in the database namely <strong>user_system_info</strong>, <strong>successful_installs</strong>, and <strong>failed_installs</strong>. Both successful_installs and failed installs contain a foreign key which references the id of user table. The schema is as follows:
+<img src="http://i.imgur.com/vTTrkDP.png" alt="image" /></p>
+
+<p>I have created the <a href="https://github.com/prerit2010/Result-aggregation-server/blob/master/app/models.py">models</a> and also the relationship between the tables (one to many). Each time there is any change in the schema I run the migration script <code class="highlighter-rouge">manage.py</code> which migrates and then upgrades the schema. This script uses <a href="https://flask-migrate.readthedocs.io/en/latest/">Flask-migrate</a> which is build on top of <a href="http://alembic.readthedocs.io/en/latest/">alembic</a>. Data that is to be sent by installation test scripts will be a dictionary with 3 keys: <em>user_system_info</em> , <em>succesful_installs</em>, and <em>failed_installs</em>. Here, <em>user_system_info</em> will be a dictionary, <em>successful_installs</em>, a list of dictionaries, and <em>failed_installs</em>, a list of dictionaries too. I have written the <a href="https://github.com/prerit2010/Result-aggregation-server/blob/master/app/views.py">endpoint</a> and tested it using curl. Everything seems to be working correctly. Although, there are some constrains to be applied during the insertion of data. One user may run the script many times, in that case data should be updated instead of insertion. I’m planning to use the combination of <em>email_id</em> and <em>workshop_id</em> as the unique key to identify a user and update their data. Also, the reponse the API gives can be improved, as it may contain some useful information for the user. Will post further updates soon. Cheers! :)</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>GSoC2016 - Community Bonding Experience</title>
 	  <link>//GSoC2016-Community-Bonding-Experience</link>
 	  <author>prerit2010</author>
