@@ -12,6 +12,56 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>GSoC 2016 Project - Schema update</title>
+	  <link>//GSoC-Project-Schema-update</link>
+	  <author>prerit2010</author>
+	  <pubDate>2016-06-02T15:48:00+05:30</pubDate>
+	  <guid>//GSoC-Project-Schema-update</guid>
+	  <description><![CDATA[
+	     <p>The concern regarding the updation of data, if the user run the scripts several times has been resolved . Initially I had thoughts of using <em>workshop_id</em> and <em>email_id</em> to identify the user. But as it turned out, we had to capture the data even if a user doesn’t provide their <em>email_id</em> and <em>workshop_id</em>. So as proposed by <a href="https://github.com/pbanaszkiewicz">Piotr Banaszkiewicz</a>, we can use a hash which will be returned by API to the user. This hash can then be saved on the disk.</p>
+
+<p>We have to keep a track of the user’s progress during installation of packages. So everytime a user runs the script, all the data is logged in the tables. But this would require an attempt number to be associated with each request, so that, each attempt can be distinguished from the other. I have added a table <strong>Attempts</strong>, the primary key of which will be used as foreign key in both tables, and would allow us to distinguish between attempts.</p>
+
+<p><strong>Therefore, on each request a user makes, following things are done:</strong></p>
+
+<ul>
+  <li>Script checks whether it already has a unique key in the file ‘key.txt’. If yes, it checks whether the date of the key and current date are same. As this key might have been generated for some other workshop held on some other day.</li>
+  <li>If both checks are passed, then it sends this unique key along with the data. Else, unique key is set to None.</li>
+  <li>Server checks whether it already has a ‘user’ record for this unique id. If yes, same user id is used for insertion of data in the tables.</li>
+  <li>Attempts table contains a primary key <code class="highlighter-rouge">id</code> which is also the foreign key in ‘successfull_installs’ and ‘failed_installs’ tables. Using this key, attempts/progress of the user can be tracked down.</li>
+</ul>
+
+<p>A unique id is associated with each user and their several attempts. This helps in recognizing the existing user, and thus associating the same user id with <em>failed</em> and <em>succesfull installs</em>. I chose to use UUID over hash, as it is much easier to handle. Refer this <a href="http://stackoverflow.com/questions/703035/when-are-you-truly-forced-to-use-uuid-as-part-of-the-design/786541#786541">link</a>. And it also turns out to be better than hashing technique like SHA1 in some aspects. Refer this <a href="https://www.percona.com/blog/2007/03/13/to-uuid-or-not-to-uuid/">link</a></p>
+<font color="Green"><b>Summing up, following things have been done till date :</b></font>
+<p><br />
+<i class="fa fa-check" aria-hidden="true"></i>   Develop models of database using SQLAlchemy. <br />
+<i class="fa fa-check" aria-hidden="true"></i>   Migration of database using Flask-Migrate. <br />
+<i class="fa fa-check" aria-hidden="true"></i>   API endpoint “/installation_data/”. <br />
+<i class="fa fa-check" aria-hidden="true"></i>   Database connection with API. <br />
+<i class="fa fa-check" aria-hidden="true"></i>   Modification of installation script to send data to server (POST request). <br />
+<i class="fa fa-check" aria-hidden="true"></i>   Saving key to local disk for unique identification. <br /></p>
+
+<font color="Red"><b>TODO :</b></font>
+<p><br />
+<i class="fa fa-tasks" aria-hidden="true"></i>   Sending the error description and causes along with failure and success list. <br />
+<i class="fa fa-tasks" aria-hidden="true"></i>   Collecting User’s system information for sending to server.<br />
+<i class="fa fa-tasks" aria-hidden="true"></i>   Writing Unit tests.<br />
+<i class="fa fa-tasks" aria-hidden="true"></i>   Analysis of results.<br />
+<i class="fa fa-tasks" aria-hidden="true"></i>   Writing the front end to visualize the data.<br />
+<i class="fa fa-tasks" aria-hidden="true"></i>   Testing and Bug fixes. <br />
+<i class="fa fa-tasks" aria-hidden="true"></i>   Testing the scripts on several operating systems. <br /></p>
+
+<p><strong>Project Code:</strong></p>
+
+<ul>
+  <li>API Repsitory : <a href="https://github.com/prerit2010/Result-aggregation-server">Result-aggregation-server</a></li>
+  <li>Scripts Repository : <a href="https://github.com/prerit2010/swc-setup-installation-test">swc-setup-installation-test</a></li>
+</ul>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>Beginning the GSoC Project</title>
 	  <link>//Beginning-the-GSoC-Project</link>
 	  <author>prerit2010</author>

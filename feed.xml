@@ -8,6 +8,21 @@
     
       
       <item>
+        <title>GSoC 2016 Project - Schema update</title>
+        
+          <description>&lt;p&gt;The concern regarding the updation of data, if the user run the scripts several times has been resolved . Initially I had thoughts of using &lt;em&gt;workshop_id&lt;/em&gt; and &lt;em&gt;email_id&lt;/em&gt; to identify the user. But as it turned out, we had to capture the data even if a user doesn’t provide their &lt;em&gt;email_id&lt;/em&gt; and &lt;em&gt;workshop_id&lt;/em&gt;. So as proposed by &lt;a href=&quot;https://github.com/pbanaszkiewicz&quot;&gt;Piotr Banaszkiewicz&lt;/a&gt;, we can use a hash which will be returned by API to the user. This hash can then be saved on the disk.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Thu, 02 Jun 2016 15:48:00 +0530</pubDate>
+        <link>
+        http://prerit2010.github.io//GSoC-Project-Schema-update</link>
+        <guid isPermaLink="true">http://prerit2010.github.io//GSoC-Project-Schema-update</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>Beginning the GSoC Project</title>
         
           <description>&lt;p&gt;After 2 long exhausting weeks of exams, I am finally done with my graduation :). And now I have buckled up to code the summer away with Software Carpentry (NumFocus).&lt;/p&gt;

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>Hello World!</title>
+    <title>GSoC 2016 Project - Schema update</title>
     <meta name="description" content="Going Distances on One Boat! - A blog by Prerit Garg." />
 
     <meta name="HandheldFriendly" content="True" />
@@ -93,7 +93,7 @@
 <!-- Everything inside the #post tags pulls data from the post -->
 <!-- #post -->
 
-<header class="main-header post-head " style="background-image: url(/assets/images/hello.jpg) ">
+<header class="main-header post-head " style="background-image: url(/assets/images/gsoc2016-banner.png) ">
     <nav class="main-nav  overlay  clearfix">
         <a class="blog-logo" href="/"><img src="/assets/images/ghost.png" alt="Blog Logo" /></a>
         
@@ -104,19 +104,19 @@
 
 <main class="content" role="main">
 
-    <article class="post tag-general">
+    <article class="post tag-GSoC2016">
 
         <header class="post-header">
-            <h1 class="post-title">Hello World!</h1>
+            <h1 class="post-title">GSoC 2016 Project - Schema update</h1>
             <section class="post-meta">
             <!-- <a href='/'>prerit2010</a> -->
-            <time class="post-date" datetime="2016-04-26">26 Apr 2016</time>
+            <time class="post-date" datetime="2016-06-02">02 Jun 2016</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
                 
                     
-                       <a href='/tag/general'>General</a>
+                       <a href='/tag/GSoC2016'>Gsoc2016</a>
                        
                 
                 
@@ -125,33 +125,38 @@
 
         <section class="post-content">
             
-            <div class="highlighter-rouge"><pre class="highlight"><code><span class="k">print</span> <span class="s">'Hello World!'</span>
-</code></pre>
-</div>
+            <p>The concern regarding the updation of data, if the user run the scripts several times has been resolved . Initially I had thoughts of using <em>workshop_id</em> and <em>email_id</em> to identify the user. But as it turned out, we had to capture the data even if a user doesn’t provide their <em>email_id</em> and <em>workshop_id</em>. So as proposed by <a href="https://github.com/pbanaszkiewicz">Piotr Banaszkiewicz</a>, we can use a hash which will be returned by API to the user. This hash can then be saved on the disk.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="err">'</span><span class="n">Hello</span> <span class="n">World</span><span class="o">!</span><span class="err">'</span><span class="o">);</span>
-</code></pre>
-</div>
+<p>We have to keep a track of the user’s progress during installation of packages. So everytime a user runs the script, all the data is logged in the tables. But this would require an attempt number to be associated with each request, so that, each attempt can be distinguished from the other. I have added a table <strong>Attempts</strong>, the primary key of which will be used as foreign key in both tables, and would allow us to distinguish between attempts.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"Hello World!"</span><span class="p">;</span>
-</code></pre>
-</div>
+<p><strong>Therefore, on each request a user makes, following things are done:</strong></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">printf</span><span class="p">(</span><span class="s">"Hello World!"</span><span class="p">);</span>
-</code></pre>
-</div>
+<ul>
+  <li>Script checks whether it already has a unique key in the file ‘key.txt’. If yes, it checks whether the date of the key and current date are same. As this key might have been generated for some other workshop held on some other day.</li>
+  <li>If both checks are passed, then it sends this unique key along with the data. Else, unique key is set to None.</li>
+  <li>Server checks whether it already has a ‘user’ record for this unique id. If yes, same user id is used for insertion of data in the tables.</li>
+  <li>Attempts table contains a primary key <code class="highlighter-rouge">id</code> which is also the foreign key in ‘successfull_installs’ and ‘failed_installs’ tables. Using this key, attempts/progress of the user can be tracked down.</li>
+</ul>
 
-<p>This is a convention followed by almost every programmer to start learning to code with a simple ‘Hello World’ program. Every tutorial, and nowadays every blog starts with Hello World. I prefer not to break this convention, and start by writing my first blogpost as ‘Hello World!’ :)</p>
+<p>A unique id is associated with each user and their several attempts. This helps in recognizing the existing user, and thus associating the same user id with <em>failed</em> and <em>succesfull installs</em>. I chose to use UUID over hash, as it is much easier to handle. Refer this <a href="http://stackoverflow.com/questions/703035/when-are-you-truly-forced-to-use-uuid-as-part-of-the-design/786541#786541">link</a>. And it also turns out to be better than hashing technique like SHA1 in some aspects. Refer this <a href="https://www.percona.com/blog/2007/03/13/to-uuid-or-not-to-uuid/">link</a></p>
+<font color="Green"><b>Summing up, following things have been done till date :</b></font>
+<p><br />
+<i class="fa fa-check" aria-hidden="true"></i>   Develop models of database using SQLAlchemy. <br />
+<i class="fa fa-check" aria-hidden="true"></i>   Migration of database using Flask-Migrate. <br />
+<i class="fa fa-check" aria-hidden="true"></i>   API endpoint “/installation_data/”. <br />
+<i class="fa fa-check" aria-hidden="true"></i>   Database connection with API. <br />
+<i class="fa fa-check" aria-hidden="true"></i>   Modification of installation script to send data to server (POST request). <br />
+<i class="fa fa-check" aria-hidden="true"></i>   Saving key to local disk for unique identification. <br /></p>
 
-<p>For quite a long time I had been thinking to start writing blogposts, and had been developing my blog using flask web framework. But laziness or whatever you can say, delayed it. But as quoted by someone:</p>
-
-<blockquote>
-  <p>Necessity is the mother of invention!</p>
-</blockquote>
-
-<p>I have finally ended up using Github Pages for my blog.<br />And the Necessity is:	I need to write my <a href="https://summerofcode.withgoogle.com/">Google Summer of Code 2016</a> project progress as blog posts every 2 weeks :D.</p>
-
-<p>I’ll not only be writing about the projects or technical stuffs, but also about my life experiences.  So here we go! ;)</p>
+<font color="Red"><b>TODO :</b></font>
+<p><br />
+<i class="fa fa-tasks" aria-hidden="true"></i>   Sending the error description and causes along with failure and success list. <br />
+<i class="fa fa-tasks" aria-hidden="true"></i>   Collecting User’s system information for sending to server.<br />
+<i class="fa fa-tasks" aria-hidden="true"></i>   Writing Unit tests.<br />
+<i class="fa fa-tasks" aria-hidden="true"></i>   Analysis of results.<br />
+<i class="fa fa-tasks" aria-hidden="true"></i>   Writing the front end to visualize the data.<br />
+<i class="fa fa-tasks" aria-hidden="true"></i>   Testing and Bug fixes. <br />
+<i class="fa fa-tasks" aria-hidden="true"></i>   Testing the scripts on several operating systems. <br /></p>
 
 
         </section>
@@ -193,15 +198,15 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC2016-Community-Bonding-Experience">
-            <section class="post">
-                <h2>GSoC2016 - Community Bonding Experience</h2>
-                <p>The **Community Bonding period** of [Google Summer of Code 2016](https://summerofcode.withgoogle.com/) started from _April 23, 2016_...</p>
-            </section>
-        </a>
-    
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
+    
+        <a class="read-next-story prev " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/Beginning-the-GSoC-Project">
+            <section class="post">
+                <h2>Beginning the GSoC Project</h2>
+                <p>After 2 long exhausting weeks of exams, I am finally done with my graduation :)....</p>
+            </section>
+        </a>
     
     <!-- [[! /prev_post ]] -->
 </aside>
