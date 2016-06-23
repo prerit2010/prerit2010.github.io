@@ -18,19 +18,19 @@
 	  <pubDate>2016-04-26T15:48:00+05:30</pubDate>
 	  <guid>//hello-world</guid>
 	  <description><![CDATA[
-	     <div class="highlighter-rouge"><pre class="highlight"><code><span class="k">print</span> <span class="s">'Hello World!'</span>
+	     <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">print</span> <span class="s">'Hello World!'</span>
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="err">'</span><span class="n">Hello</span> <span class="n">World</span><span class="o">!</span><span class="err">'</span><span class="o">);</span>
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="err">'</span><span class="n">Hello</span> <span class="n">World</span><span class="o">!</span><span class="err">'</span><span class="o">);</span>
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"Hello World!"</span><span class="p">;</span>
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"Hello World!"</span><span class="p">;</span>
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">printf</span><span class="p">(</span><span class="s">"Hello World!"</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">printf</span><span class="p">(</span><span class="s">"Hello World!"</span><span class="p">);</span>
 </code></pre>
 </div>
 

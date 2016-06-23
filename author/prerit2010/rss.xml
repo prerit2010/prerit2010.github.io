@@ -12,6 +12,46 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>GSoC 2016 Project - API Deployment and Testing</title>
+	  <link>//GSoC-Poject-Deployment-Testing</link>
+	  <author>prerit2010</author>
+	  <pubDate>2016-06-23T15:48:00+05:30</pubDate>
+	  <guid>//GSoC-Poject-Deployment-Testing</guid>
+	  <description><![CDATA[
+	     <p>One of the most tedious task in any python web application project is the <strong>Deployment</strong> (at least for those who haven’t tasted it yet). I have done this many times, but it still annoys me ;-). May be that’s why companies have a separate Devops team who look into all of these deployment issues. Well, whether it feels good or not, I have deployed my flask API on the <a href="">nginx</a> server which runs on Ubuntu 16.04. The usual steps : Creating <strong>uwsgi configuration file</strong>, <strong>nginx configuration file</strong> etc. Earlier I used to create an <em>upstart script</em> to automatically run uwsgi on reboot of system, but as it turned out, since Ubuntu 15.04, systemd services have been made as default. So basically now I created a <em>systemd</em> service unit file, and started it using <code class="highlighter-rouge">sudo systemctl start Result-aggregation-server</code>.</p>
+
+<p>Major portion of the code like inserting the data in the tables has been done. Now it needed some testing. I had added the feature of unique key in the installation test scripts, i.e whenever a request is sent to server, a unique is sent along with the data to identify the user. But as it got struck in my mind, if by any chance the user accidentally changes the unique key manually in <code class="highlighter-rouge">key.txt</code>, then their will be inconsistent data in the table. So I inserted a check upon the validity of the key as well, as whether a record exists with this unique Key or not.</p>
+
+<p><strong>Unit Tests:</strong> Also wrote a few unit test to test some important use cases. For example:</p>
+
+<ul>
+  <li>If the <code class="highlighter-rouge">successful_installs</code> list is empty</li>
+  <li>If the <code class="highlighter-rouge">failed_installs</code> list is empty</li>
+  <li>Deleting a user should also delete its corresponding success and fail data.</li>
+</ul>
+
+<p>I also tested the scripts on windows platform and other linux distribution, there were some errors like version couldn’t be found, etc. Well, now they seem to be working well.</p>
+
+<p>During the course of testing the scripts and API, I came across with 2 issues :</p>
+
+<ul>
+  <li>If we ask the users to input the email id and workshop id, and in case they do not want to provide their email id, they might terminate the script completely. This would prevent any data to be pushed to server. So maybe we should totally remove the idea of any such user input. But, having said that, workshop id can be a really useful data.</li>
+</ul>
+
+<p>Above issue has been resolved by simply asking from the user whether they want to share their email id and workshop id.</p>
+
+<ul>
+  <li>As the scripts are totally open source, and thus our API endpoint, we should have some kind of secret key required to push the data to server, as otherwise any random person (with dirty intention) can harm our server severely.</li>
+</ul>
+
+<p>Above issue is resolved by throttling. Using redis, requests are limited to 100 per IP per hour.</p>
+
+<p>Further steps may include the development of the front end with charts and statistics to extract some useful information out of the data received from installation scripts.</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>GSoC 2016 Project - Schema update</title>
 	  <link>//GSoC-Project-Schema-update</link>
 	  <author>prerit2010</author>
@@ -72,7 +112,7 @@
 
 <p>As I had figured out earlier, the installation data about the packages, like name and version is easily available in the <a href="https://github.com/wking/swc-setup-installation-test">installation test scripts</a> in the form of a list. But this case is only for successful installs. For failures I don’t have a direct list, rather I have a list of messages that are displayed by the script to the users for each failure, which have been designed something like this:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_url</span><span class="p">()</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s">'check for {0} failed:'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">checker</span><span class="o">.</span><span class="n">full_name</span><span class="p">()),</span>
@@ -147,7 +187,7 @@ will expire after 90 days. Initially I was worried about the performance of Virt
 
 <p><a href="https://github.com/wking/swc-setup-installation-test">Installation test scripts</a> are to be updated to add the feature of sending the data to the server, that I’ll be creating during the coding period. I went through the scripts, and I must say, its written quite comprehensively. Also, the best part being, it may not be required to play with a lot of code in there, as the information that I need from the script, which is mainly <strong>successfully installed packages</strong> list and <strong>failed installed packages</strong> list is directly available in the form of <code class="highlighter-rouge">python lists</code>. Here is a little code snippet of that :</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">checks</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">checks</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="n">successes</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">failures</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">checks</span><span class="p">:</span>
@@ -197,19 +237,19 @@ will expire after 90 days. Initially I was worried about the performance of Virt
 	  <pubDate>2016-04-26T15:48:00+05:30</pubDate>
 	  <guid>//hello-world</guid>
 	  <description><![CDATA[
-	     <div class="highlighter-rouge"><pre class="highlight"><code><span class="k">print</span> <span class="s">'Hello World!'</span>
+	     <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">print</span> <span class="s">'Hello World!'</span>
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="err">'</span><span class="n">Hello</span> <span class="n">World</span><span class="o">!</span><span class="err">'</span><span class="o">);</span>
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="err">'</span><span class="n">Hello</span> <span class="n">World</span><span class="o">!</span><span class="err">'</span><span class="o">);</span>
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"Hello World!"</span><span class="p">;</span>
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"Hello World!"</span><span class="p">;</span>
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">printf</span><span class="p">(</span><span class="s">"Hello World!"</span><span class="p">);</span>
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">printf</span><span class="p">(</span><span class="s">"Hello World!"</span><span class="p">);</span>
 </code></pre>
 </div>
 

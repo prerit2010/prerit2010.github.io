@@ -129,7 +129,7 @@
 
 <p>As I had figured out earlier, the installation data about the packages, like name and version is easily available in the <a href="https://github.com/wking/swc-setup-installation-test">installation test scripts</a> in the form of a list. But this case is only for successful installs. For failures I don’t have a direct list, rather I have a list of messages that are displayed by the script to the users for each failure, which have been designed something like this:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_url</span><span class="p">()</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s">'check for {0} failed:'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">checker</span><span class="o">.</span><span class="n">full_name</span><span class="p">()),</span>
@@ -203,13 +203,6 @@
 
     <!-- [[! next_post ]] -->
     
-        <a class="read-next-story " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-Schema-update">
-            <section class="post">
-                <h2>GSoC 2016 Project - Schema update</h2>
-                <p>The concern regarding the updation of data, if the user run the scripts several times...</p>
-            </section>
-        </a>
-    
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
@@ -217,6 +210,15 @@
             <section class="post">
                 <h2>GSoC2016 - Community Bonding Experience</h2>
                 <p>The Community Bonding period of Google Summer of Code 2016 started from April 23, 2016...</p>
+            </section>
+        </a>
+    
+
+    
+        <a class="read-next-story " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-Schema-update">
+            <section class="post">
+                <h2>GSoC 2016 Project - Schema update</h2>
+                <p>The concern regarding the updation of data, if the user run the scripts several times...</p>
             </section>
         </a>
     

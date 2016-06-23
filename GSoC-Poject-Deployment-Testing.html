@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>GSoC 2016 Project - Schema update</title>
+    <title>GSoC 2016 Project - API Deployment and Testing</title>
     <meta name="description" content="Going Distances on One Boat! - A blog by Prerit Garg." />
 
     <meta name="HandheldFriendly" content="True" />
@@ -107,10 +107,10 @@
     <article class="post tag-GSoC2016">
 
         <header class="post-header">
-            <h1 class="post-title">GSoC 2016 Project - Schema update</h1>
+            <h1 class="post-title">GSoC 2016 Project - API Deployment and Testing</h1>
             <section class="post-meta">
             <!-- <a href='/'>prerit2010</a> -->
-            <time class="post-date" datetime="2016-06-02">02 Jun 2016</time>
+            <time class="post-date" datetime="2016-06-23">23 Jun 2016</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -125,45 +125,35 @@
 
         <section class="post-content">
             
-            <p>The concern regarding the updation of data, if the user run the scripts several times has been resolved . Initially I had thoughts of using <em>workshop_id</em> and <em>email_id</em> to identify the user. But as it turned out, we had to capture the data even if a user doesn’t provide their <em>email_id</em> and <em>workshop_id</em>. So as proposed by <a href="https://github.com/pbanaszkiewicz">Piotr Banaszkiewicz</a>, we can use a hash which will be returned by API to the user. This hash can then be saved on the disk.</p>
+            <p>One of the most tedious task in any python web application project is the <strong>Deployment</strong> (at least for those who haven’t tasted it yet). I have done this many times, but it still annoys me ;-). May be that’s why companies have a separate Devops team who look into all of these deployment issues. Well, whether it feels good or not, I have deployed my flask API on the <a href="">nginx</a> server which runs on Ubuntu 16.04. The usual steps : Creating <strong>uwsgi configuration file</strong>, <strong>nginx configuration file</strong> etc. Earlier I used to create an <em>upstart script</em> to automatically run uwsgi on reboot of system, but as it turned out, since Ubuntu 15.04, systemd services have been made as default. So basically now I created a <em>systemd</em> service unit file, and started it using <code class="highlighter-rouge">sudo systemctl start Result-aggregation-server</code>.</p>
 
-<p>We have to keep a track of the user’s progress during installation of packages. So everytime a user runs the script, all the data is logged in the tables. But this would require an attempt number to be associated with each request, so that, each attempt can be distinguished from the other. I have added a table <strong>Attempts</strong>, the primary key of which will be used as foreign key in both tables, and would allow us to distinguish between attempts.</p>
+<p>Major portion of the code like inserting the data in the tables has been done. Now it needed some testing. I had added the feature of unique key in the installation test scripts, i.e whenever a request is sent to server, a unique is sent along with the data to identify the user. But as it got struck in my mind, if by any chance the user accidentally changes the unique key manually in <code class="highlighter-rouge">key.txt</code>, then their will be inconsistent data in the table. So I inserted a check upon the validity of the key as well, as whether a record exists with this unique Key or not.</p>
 
-<p><strong>Therefore, on each request a user makes, following things are done:</strong></p>
-
-<ul>
-  <li>Script checks whether it already has a unique key in the file ‘key.txt’. If yes, it checks whether the date of the key and current date are same. As this key might have been generated for some other workshop held on some other day.</li>
-  <li>If both checks are passed, then it sends this unique key along with the data. Else, unique key is set to None.</li>
-  <li>Server checks whether it already has a ‘user’ record for this unique id. If yes, same user id is used for insertion of data in the tables.</li>
-  <li>Attempts table contains a primary key <code class="highlighter-rouge">id</code> which is also the foreign key in ‘successfull_installs’ and ‘failed_installs’ tables. Using this key, attempts/progress of the user can be tracked down.</li>
-</ul>
-
-<p>A unique id is associated with each user and their several attempts. This helps in recognizing the existing user, and thus associating the same user id with <em>failed</em> and <em>succesfull installs</em>. I chose to use UUID over hash, as it is much easier to handle. Refer this <a href="http://stackoverflow.com/questions/703035/when-are-you-truly-forced-to-use-uuid-as-part-of-the-design/786541#786541">link</a>. And it also turns out to be better than hashing technique like SHA1 in some aspects. Refer this <a href="https://www.percona.com/blog/2007/03/13/to-uuid-or-not-to-uuid/">link</a></p>
-<font color="Green"><b>Summing up, following things have been done till date :</b></font>
-<p><br />
-<i class="fa fa-check" aria-hidden="true"></i>   Develop models of database using SQLAlchemy. <br />
-<i class="fa fa-check" aria-hidden="true"></i>   Migration of database using Flask-Migrate. <br />
-<i class="fa fa-check" aria-hidden="true"></i>   API endpoint “/installation_data/”. <br />
-<i class="fa fa-check" aria-hidden="true"></i>   Database connection with API. <br />
-<i class="fa fa-check" aria-hidden="true"></i>   Modification of installation script to send data to server (POST request). <br />
-<i class="fa fa-check" aria-hidden="true"></i>   Saving key to local disk for unique identification. <br /></p>
-
-<font color="Red"><b>TODO :</b></font>
-<p><br />
-<i class="fa fa-tasks" aria-hidden="true"></i>   Sending the error description and causes along with failure and success list. <br />
-<i class="fa fa-tasks" aria-hidden="true"></i>   Collecting User’s system information for sending to server.<br />
-<i class="fa fa-tasks" aria-hidden="true"></i>   Writing Unit tests.<br />
-<i class="fa fa-tasks" aria-hidden="true"></i>   Analysis of results.<br />
-<i class="fa fa-tasks" aria-hidden="true"></i>   Writing the front end to visualize the data.<br />
-<i class="fa fa-tasks" aria-hidden="true"></i>   Testing and Bug fixes. <br />
-<i class="fa fa-tasks" aria-hidden="true"></i>   Testing the scripts on several operating systems. <br /></p>
-
-<p><strong>Project Code:</strong></p>
+<p><strong>Unit Tests:</strong> Also wrote a few unit test to test some important use cases. For example:</p>
 
 <ul>
-  <li>API Repository : <a href="https://github.com/prerit2010/Result-aggregation-server">Result-aggregation-server</a></li>
-  <li>Scripts Repository : <a href="https://github.com/prerit2010/swc-setup-installation-test">swc-setup-installation-test</a></li>
+  <li>If the <code class="highlighter-rouge">successful_installs</code> list is empty</li>
+  <li>If the <code class="highlighter-rouge">failed_installs</code> list is empty</li>
+  <li>Deleting a user should also delete its corresponding success and fail data.</li>
 </ul>
+
+<p>I also tested the scripts on windows platform and other linux distribution, there were some errors like version couldn’t be found, etc. Well, now they seem to be working well.</p>
+
+<p>During the course of testing the scripts and API, I came across with 2 issues :</p>
+
+<ul>
+  <li>If we ask the users to input the email id and workshop id, and in case they do not want to provide their email id, they might terminate the script completely. This would prevent any data to be pushed to server. So maybe we should totally remove the idea of any such user input. But, having said that, workshop id can be a really useful data.</li>
+</ul>
+
+<p>Above issue has been resolved by simply asking from the user whether they want to share their email id and workshop id.</p>
+
+<ul>
+  <li>As the scripts are totally open source, and thus our API endpoint, we should have some kind of secret key required to push the data to server, as otherwise any random person (with dirty intention) can harm our server severely.</li>
+</ul>
+
+<p>Above issue is resolved by throttling. Using redis, requests are limited to 100 per IP per hour.</p>
+
+<p>Further steps may include the development of the front end with charts and statistics to extract some useful information out of the data received from installation scripts.</p>
 
 
         </section>
@@ -208,21 +198,14 @@
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/Beginning-the-GSoC-Project">
+        <a class="read-next-story prev " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-Schema-update">
             <section class="post">
-                <h2>Beginning the GSoC Project</h2>
-                <p>After 2 long exhausting weeks of exams, I am finally done with my graduation :)....</p>
+                <h2>GSoC 2016 Project - Schema update</h2>
+                <p>The concern regarding the updation of data, if the user run the scripts several times...</p>
             </section>
         </a>
     
 
-    
-        <a class="read-next-story " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Poject-Deployment-Testing">
-            <section class="post">
-                <h2>GSoC 2016 Project - API Deployment and Testing</h2>
-                <p>One of the most tedious task in any python web application project is the **Deployment**...</p>
-            </section>
-        </a>
     
     <!-- [[! /prev_post ]] -->
 </aside>
