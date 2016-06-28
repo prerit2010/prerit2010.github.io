@@ -15,7 +15,7 @@
 	  <title>GSoC 2016 Project - Weekly update</title>
 	  <link>//GSoC-Project-weekly-update</link>
 	  <author>prerit2010</author>
-	  <pubDate>2016-06-23T15:48:00+05:30</pubDate>
+	  <pubDate>2016-06-28T15:48:00+05:30</pubDate>
 	  <guid>//GSoC-Project-weekly-update</guid>
 	  <description><![CDATA[
 	     <p>Added <a href="https://travis-ci.org/">Travis-CI</a> integration in the API. Now at each commit I make on github, Travis will test the API by running the <code class="highlighter-rouge">test.py</code> file, and will inform if the build fails.</p>
