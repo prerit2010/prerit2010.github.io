@@ -8,6 +8,21 @@
     
       
       <item>
+        <title>GSoC 2016 Project - Weekly update</title>
+        
+          <description>&lt;p&gt;Added &lt;a href=&quot;https://travis-ci.org/&quot;&gt;Travis-CI&lt;/a&gt; integration in the API. Now at each commit I make on github, Travis will test the API by running the &lt;code class=&quot;highlighter-rouge&quot;&gt;test.py&lt;/code&gt; file, and will inform if the build fails.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Thu, 23 Jun 2016 15:48:00 +0530</pubDate>
+        <link>
+        http://prerit2010.github.io//GSoC-Project-weekly-update</link>
+        <guid isPermaLink="true">http://prerit2010.github.io//GSoC-Project-weekly-update</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>GSoC 2016 Project - API Deployment and Testing</title>
         
           <description>&lt;p&gt;One of the most tedious task in any python web application project is the &lt;strong&gt;Deployment&lt;/strong&gt; (at least for those who haven’t tasted it yet). I have done this many times, but it still annoys me ;-). May be that’s why companies have a separate Devops team who look into all of these deployment issues. Well, whether it feels good or not, I have deployed my flask API on the &lt;a href=&quot;&quot;&gt;nginx&lt;/a&gt; server which runs on Ubuntu 16.04. The usual steps : Creating &lt;strong&gt;uwsgi configuration file&lt;/strong&gt;, &lt;strong&gt;nginx configuration file&lt;/strong&gt; etc. Earlier I used to create an &lt;em&gt;upstart script&lt;/em&gt; to automatically run uwsgi on reboot of system, but as it turned out, since Ubuntu 15.04, systemd services have been made as default. So basically now I created a &lt;em&gt;systemd&lt;/em&gt; service unit file, and started it using &lt;code class=&quot;highlighter-rouge&quot;&gt;sudo systemctl start Result-aggregation-server&lt;/code&gt;.&lt;/p&gt;
@@ -16,8 +31,8 @@
         
         <pubDate>Thu, 23 Jun 2016 15:48:00 +0530</pubDate>
         <link>
-        http://prerit2010.github.io//GSoC-Poject-Deployment-Testing</link>
-        <guid isPermaLink="true">http://prerit2010.github.io//GSoC-Poject-Deployment-Testing</guid>
+        http://prerit2010.github.io//GSoC-Project-Deployment-Testing</link>
+        <guid isPermaLink="true">http://prerit2010.github.io//GSoC-Project-Deployment-Testing</guid>
       </item>
       
     

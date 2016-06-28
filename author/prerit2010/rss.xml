@@ -12,11 +12,33 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
-	  <title>GSoC 2016 Project - API Deployment and Testing</title>
-	  <link>//GSoC-Poject-Deployment-Testing</link>
+	  <title>GSoC 2016 Project - Weekly update</title>
+	  <link>//GSoC-Project-weekly-update</link>
 	  <author>prerit2010</author>
 	  <pubDate>2016-06-23T15:48:00+05:30</pubDate>
-	  <guid>//GSoC-Poject-Deployment-Testing</guid>
+	  <guid>//GSoC-Project-weekly-update</guid>
+	  <description><![CDATA[
+	     <p>Added <a href="https://travis-ci.org/">Travis-CI</a> integration in the API. Now at each commit I make on github, Travis will test the API by running the <code class="highlighter-rouge">test.py</code> file, and will inform if the build fails.</p>
+
+<p>In the API, when a user sends the data with same <code class="highlighter-rouge">unique_user_id</code>, i.e another attempt, API was not updating the <code class="highlighter-rouge">UserSystemInfo</code> on this request, assuming the system’s information will remain same even in the second request. But this isn’t true for <code class="highlighter-rouge">email_id</code> and <code class="highlighter-rouge">workshop_id</code>. A user may enter the email id in the second attempt, while may have denied in the previous one. And also, they may have entered a wrong email id in the previous attempt, so they might want to update them in the next. So everytime a user makes a request, system’s information is also updated.</p>
+
+<p>But this may create a problem. If second time user doesn’t enter the email and workshop id, the API will rewrite the email and workshop field to <code class="highlighter-rouge">None</code>. So API should update only when the received email or workshop id is <strong>not</strong> <code class="highlighter-rouge">None</code>. Added the unit test for the same.</p>
+
+<p>Tested the scripts at various platform of linux and windows as well. But I had no access to OS X. So <a href="https://github.com/pbanaszkiewicz">Piotr Banaszkiewicz</a> asked <a href="https://github.com/gvwilson">Greg Wilson</a> to test the scripts on his OS X machine and share the feedback with us. The scripts ran without any issues on OS X as well.</p>
+
+<p>I have increased the rate limit to 500 per hour per IP for the time. As when I was testing the API on my computer, the test script made more than 10 calls to API on single execution, and thus very soon all the tests started failing, as the limit had reached.</p>
+
+<p>Now, I think it’s time to get going with the frontend, and visualize the data with charts and statistics. There are several options like <a href="https://plot.ly/javascript/">Plotly.js</a>, <a href="http://c3js.org/">C3.js</a>, <a href="http://metricsgraphicsjs.org/">MetricGRaphics.js</a> etc. I’ll select the most approriate library after having all the use cases with me. MetricGraphics is a well maintained JS library by Mozilla. But it seems like more for timeline purpose. So I may have to rely either on Plotly or C3. They kinda do justice to my requirements. Anyway, I’ll come to that later.</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
+	  <title>GSoC 2016 Project - API Deployment and Testing</title>
+	  <link>//GSoC-Project-Deployment-Testing</link>
+	  <author>prerit2010</author>
+	  <pubDate>2016-06-23T15:48:00+05:30</pubDate>
+	  <guid>//GSoC-Project-Deployment-Testing</guid>
 	  <description><![CDATA[
 	     <p>One of the most tedious task in any python web application project is the <strong>Deployment</strong> (at least for those who haven’t tasted it yet). I have done this many times, but it still annoys me ;-). May be that’s why companies have a separate Devops team who look into all of these deployment issues. Well, whether it feels good or not, I have deployed my flask API on the <a href="">nginx</a> server which runs on Ubuntu 16.04. The usual steps : Creating <strong>uwsgi configuration file</strong>, <strong>nginx configuration file</strong> etc. Earlier I used to create an <em>upstart script</em> to automatically run uwsgi on reboot of system, but as it turned out, since Ubuntu 15.04, systemd services have been made as default. So basically now I created a <em>systemd</em> service unit file, and started it using <code class="highlighter-rouge">sudo systemctl start Result-aggregation-server</code>.</p>
 
