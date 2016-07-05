@@ -12,6 +12,97 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>GSoC 2016 Project - Front end and split script</title>
+	  <link>//GSoC-Project-front-end-and-split-script</link>
+	  <author>prerit2010</author>
+	  <pubDate>2016-07-05T15:48:00+05:30</pubDate>
+	  <guid>//GSoC-Project-front-end-and-split-script</guid>
+	  <description><![CDATA[
+	     <p>I have decided to use <a href="https://plot.ly/javascript/">plotly.js</a> primarily for plotting the graphs, but as it hardly matters, I can use other libraries as well as per the requirements. To start with, I added a graph for number of users using different operating systems, and most failed installs packages till date.</p>
+
+<ul>
+  <li>Here we have 2 cases to follow in case of failed installs packages.
+    <ul>
+      <li>User may have run the script many times, and so all the attempts are saved. So one case is to show the graph on the basis of all the data (including all attempts of a user).</li>
+      <li>Other case is to have the graph show only the latest attempt. So, we would like to have a toggle button to switch on “Only latest attempt”, or switch it off to show all the data.</li>
+    </ul>
+  </li>
+  <li>
+    <p>The graphs should also be filtered on the basis of workshop. We can have a dropdown containing a list of all the workshops, and selecting one of which will lead to filtering the data for that workshop ONLY.</p>
+  </li>
+  <li>
+    <p><a href="https://github.com/rgaiacs">Raniere</a> pointed out to have raw json as well in place for the information that we are going to display. For example : <a href="">http://installation.software-carpentry.org/view/?export=json</a>. So we can have the json formatted data for all the information that we tend to receive, and just use this json to display charts in the HTML pages as well.</p>
+  </li>
+  <li>
+    <p>Project was initially built on python 2.7 (I don’t know why didn’t I use python3 from the beginning :p), but now I have migrated it to python 3.5. It didn’t require a lot of tasks, just some fixes in importing the files.</p>
+  </li>
+  <li>In the installation test scripts, 2 more command line options have been added :
+    <ul>
+      <li><code class="highlighter-rouge">-H</code> to specify the HOST name to which the data should be submitted. for example : <code class="highlighter-rouge">python swc-main.py -H 127.0.0.1:5000</code>.</li>
+      <li><code class="highlighter-rouge">-n</code> to turn off sending data to server. e.g : <code class="highlighter-rouge">python swc-main.py -n</code></li>
+    </ul>
+  </li>
+  <li>
+    <p>Changed the name of “key.txt” file to ‘.swc_submission_id’, as now it would remain hidden, and having <strong>swc</strong> in the file name tells that it belongs to software carpentry.</p>
+  </li>
+  <li><a href="https://github.com/pbanaszkiewicz">Piotr</a> suggested to split the long script, and having something like :</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requirements_check</span>
+<span class="kn">import</span> <span class="nn">api</span> <span class="kn">as</span> <span class="nn">API</span>
+
+<span class="n">REQUIRED</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">'python&gt;=3.5'</span><span class="p">,</span>
+    <span class="s">'numpy'</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">errors</span><span class="p">,</span> <span class="n">passed</span> <span class="o">=</span> <span class="n">requirements_check</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">REQUIRED</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">errors</span><span class="p">:</span>
+        <span class="c"># communicate error to the user</span>
+
+        <span class="c"># gives user a pointer on what to do when something fails</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="n">requirements_check</span><span class="o">.</span><span class="n">solution</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+
+        <span class="k">pass</span>
+
+    <span class="c"># check if user agrees to submit their data</span>
+    <span class="n">agreement</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">'...'</span><span class="p">)</span>
+    <span class="n">submition_id</span> <span class="o">=</span> <span class="n">API</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">errors</span><span class="p">,</span> <span class="n">passed</span><span class="p">)</span>
+
+    <span class="c"># add logic for working with the submition_id</span>
+    <span class="k">pass</span>
+
+    <span class="c"># logic for submitting workshop name and email</span>
+    <span class="k">pass</span>
+</code></pre>
+</div>
+
+<p>So that’s what I have done. I have separated the code for <strong>API</strong>, <strong>requirements_check</strong> and running the script. Also there used to be 2 scripts, 1 for checking the python version, and the other for checking the other requirements. But now, I have merged the first script in the second. So previous structure was :</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>|__/swc-setup-installation-test
+	|--swc-installation-test-1.py
+	|--swc-installation-test-2.py
+</code></pre>
+</div>
+<p>But now it is :</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>|__/swc-setup-installation-test
+	|--api.py
+	|--requirements_checks.py
+	|--swc-main.py
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">swc-main.py</code> is the only script that needs to be run. It imports <strong>api</strong> and <strong>requirements_checks</strong> for checking the installation dependencies and sending them to server.</p>
+
+<p>It looks good as of now, a lot of documentation is required to be done though.</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>GSoC 2016 Project - Weekly update</title>
 	  <link>//GSoC-Project-weekly-update</link>
 	  <author>prerit2010</author>

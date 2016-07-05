@@ -8,6 +8,21 @@
     
       
       <item>
+        <title>GSoC 2016 Project - Front end and split script</title>
+        
+          <description>&lt;p&gt;I have decided to use &lt;a href=&quot;https://plot.ly/javascript/&quot;&gt;plotly.js&lt;/a&gt; primarily for plotting the graphs, but as it hardly matters, I can use other libraries as well as per the requirements. To start with, I added a graph for number of users using different operating systems, and most failed installs packages till date.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Tue, 05 Jul 2016 15:48:00 +0530</pubDate>
+        <link>
+        http://prerit2010.github.io//GSoC-Project-front-end-and-split-script</link>
+        <guid isPermaLink="true">http://prerit2010.github.io//GSoC-Project-front-end-and-split-script</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>GSoC 2016 Project - Weekly update</title>
         
           <description>&lt;p&gt;Added &lt;a href=&quot;https://travis-ci.org/&quot;&gt;Travis-CI&lt;/a&gt; integration in the API. Now at each commit I make on github, Travis will test the API by running the &lt;code class=&quot;highlighter-rouge&quot;&gt;test.py&lt;/code&gt; file, and will inform if the build fails.&lt;/p&gt;

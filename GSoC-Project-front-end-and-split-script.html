@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>GSoC 2016 Project - Weekly update</title>
+    <title>GSoC 2016 Project - Front end and split script</title>
     <meta name="description" content="Going Distances on One Boat! - A blog by Prerit Garg." />
 
     <meta name="HandheldFriendly" content="True" />
@@ -107,10 +107,10 @@
     <article class="post tag-GSoC2016">
 
         <header class="post-header">
-            <h1 class="post-title">GSoC 2016 Project - Weekly update</h1>
+            <h1 class="post-title">GSoC 2016 Project - Front end and split script</h1>
             <section class="post-meta">
             <!-- <a href='/'>prerit2010</a> -->
-            <time class="post-date" datetime="2016-06-28">28 Jun 2016</time>
+            <time class="post-date" datetime="2016-07-05">05 Jul 2016</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -125,17 +125,86 @@
 
         <section class="post-content">
             
-            <p>Added <a href="https://travis-ci.org/">Travis-CI</a> integration in the API. Now at each commit I make on github, Travis will test the API by running the <code class="highlighter-rouge">test.py</code> file, and will inform if the build fails.</p>
+            <p>I have decided to use <a href="https://plot.ly/javascript/">plotly.js</a> primarily for plotting the graphs, but as it hardly matters, I can use other libraries as well as per the requirements. To start with, I added a graph for number of users using different operating systems, and most failed installs packages till date.</p>
 
-<p>In the API, when a user sends the data with same <code class="highlighter-rouge">unique_user_id</code>, i.e another attempt, API was not updating the <code class="highlighter-rouge">UserSystemInfo</code> on this request, assuming the system’s information will remain same even in the second request. But this isn’t true for <code class="highlighter-rouge">email_id</code> and <code class="highlighter-rouge">workshop_id</code>. A user may enter the email id in the second attempt, while may have denied in the previous one. And also, they may have entered a wrong email id in the previous attempt, so they might want to update them in the next. So everytime a user makes a request, system’s information is also updated.</p>
+<ul>
+  <li>Here we have 2 cases to follow in case of failed installs packages.
+    <ul>
+      <li>User may have run the script many times, and so all the attempts are saved. So one case is to show the graph on the basis of all the data (including all attempts of a user).</li>
+      <li>Other case is to have the graph show only the latest attempt. So, we would like to have a toggle button to switch on “Only latest attempt”, or switch it off to show all the data.</li>
+    </ul>
+  </li>
+  <li>
+    <p>The graphs should also be filtered on the basis of workshop. We can have a dropdown containing a list of all the workshops, and selecting one of which will lead to filtering the data for that workshop ONLY.</p>
+  </li>
+  <li>
+    <p><a href="https://github.com/rgaiacs">Raniere</a> pointed out to have raw json as well in place for the information that we are going to display. For example : <a href="">http://installation.software-carpentry.org/view/?export=json</a>. So we can have the json formatted data for all the information that we tend to receive, and just use this json to display charts in the HTML pages as well.</p>
+  </li>
+  <li>
+    <p>Project was initially built on python 2.7 (I don’t know why didn’t I use python3 from the beginning :p), but now I have migrated it to python 3.5. It didn’t require a lot of tasks, just some fixes in importing the files.</p>
+  </li>
+  <li>In the installation test scripts, 2 more command line options have been added :
+    <ul>
+      <li><code class="highlighter-rouge">-H</code> to specify the HOST name to which the data should be submitted. for example : <code class="highlighter-rouge">python swc-main.py -H 127.0.0.1:5000</code>.</li>
+      <li><code class="highlighter-rouge">-n</code> to turn off sending data to server. e.g : <code class="highlighter-rouge">python swc-main.py -n</code></li>
+    </ul>
+  </li>
+  <li>
+    <p>Changed the name of “key.txt” file to ‘.swc_submission_id’, as now it would remain hidden, and having <strong>swc</strong> in the file name tells that it belongs to software carpentry.</p>
+  </li>
+  <li><a href="https://github.com/pbanaszkiewicz">Piotr</a> suggested to split the long script, and having something like :</li>
+</ul>
 
-<p>But this may create a problem. If second time user doesn’t enter the email and workshop id, the API will rewrite the email and workshop field to <code class="highlighter-rouge">None</code>. So API should update only when the received email or workshop id is <strong>not</strong> <code class="highlighter-rouge">None</code>. Added the unit test for the same.</p>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requirements_check</span>
+<span class="kn">import</span> <span class="nn">api</span> <span class="kn">as</span> <span class="nn">API</span>
 
-<p>Tested the scripts at various platform of linux and windows as well. But I had no access to OS X. So <a href="https://github.com/pbanaszkiewicz">Piotr Banaszkiewicz</a> asked <a href="https://github.com/gvwilson">Greg Wilson</a> to test the scripts on his OS X machine and share the feedback with us. The scripts ran without any issues on OS X as well.</p>
+<span class="n">REQUIRED</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">'python&gt;=3.5'</span><span class="p">,</span>
+    <span class="s">'numpy'</span><span class="p">,</span>
+<span class="p">]</span>
 
-<p>I have increased the rate limit to 500 per hour per IP for the time. As when I was testing the API on my computer, the test script made more than 10 calls to API on single execution, and thus very soon all the tests started failing, as the limit had reached.</p>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">errors</span><span class="p">,</span> <span class="n">passed</span> <span class="o">=</span> <span class="n">requirements_check</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">REQUIRED</span><span class="p">)</span>
 
-<p>Now, I think it’s time to get going with the frontend, and visualize the data with charts and statistics. There are several options like <a href="https://plot.ly/javascript/">Plotly.js</a>, <a href="http://c3js.org/">C3.js</a>, <a href="http://metricsgraphicsjs.org/">MetricGRaphics.js</a> etc. I’ll select the most approriate library after having all the use cases with me. MetricGraphics is a well maintained JS library by Mozilla. But it seems like more for timeline purpose. So I may have to rely either on Plotly or C3. They kinda do justice to my requirements. Anyway, I’ll come to that later.</p>
+    <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">errors</span><span class="p">:</span>
+        <span class="c"># communicate error to the user</span>
+
+        <span class="c"># gives user a pointer on what to do when something fails</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="n">requirements_check</span><span class="o">.</span><span class="n">solution</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+
+        <span class="k">pass</span>
+
+    <span class="c"># check if user agrees to submit their data</span>
+    <span class="n">agreement</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">'...'</span><span class="p">)</span>
+    <span class="n">submition_id</span> <span class="o">=</span> <span class="n">API</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">errors</span><span class="p">,</span> <span class="n">passed</span><span class="p">)</span>
+
+    <span class="c"># add logic for working with the submition_id</span>
+    <span class="k">pass</span>
+
+    <span class="c"># logic for submitting workshop name and email</span>
+    <span class="k">pass</span>
+</code></pre>
+</div>
+
+<p>So that’s what I have done. I have separated the code for <strong>API</strong>, <strong>requirements_check</strong> and running the script. Also there used to be 2 scripts, 1 for checking the python version, and the other for checking the other requirements. But now, I have merged the first script in the second. So previous structure was :</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>|__/swc-setup-installation-test
+	|--swc-installation-test-1.py
+	|--swc-installation-test-2.py
+</code></pre>
+</div>
+<p>But now it is :</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>|__/swc-setup-installation-test
+	|--api.py
+	|--requirements_checks.py
+	|--swc-main.py
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">swc-main.py</code> is the only script that needs to be run. It imports <strong>api</strong> and <strong>requirements_checks</strong> for checking the installation dependencies and sending them to server.</p>
+
+<p>It looks good as of now, a lot of documentation is required to be done though.</p>
 
 
         </section>
@@ -180,21 +249,14 @@
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-Deployment-Testing">
+        <a class="read-next-story prev " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-weekly-update">
             <section class="post">
-                <h2>GSoC 2016 Project - API Deployment and Testing</h2>
-                <p>One of the most tedious task in any python web application project is the Deployment...</p>
+                <h2>GSoC 2016 Project - Weekly update</h2>
+                <p>Added Travis-CI integration in the API. Now at each commit I make on github, Travis...</p>
             </section>
         </a>
     
 
-    
-        <a class="read-next-story " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-front-end-and-split-script">
-            <section class="post">
-                <h2>GSoC 2016 Project - Front end and split script</h2>
-                <p>I have decided to use [plotly.js](https://plot.ly/javascript/) primarily for plotting the graphs, but as it hardly...</p>
-            </section>
-        </a>
     
     <!-- [[! /prev_post ]] -->
 </aside>
