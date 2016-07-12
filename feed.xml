@@ -8,6 +8,21 @@
     
       
       <item>
+        <title>GSoC 2016 Project - Front end weekly update</title>
+        
+          <description>&lt;p&gt;Front end work is on its way. I have created 3 endpoints as of now.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Tue, 12 Jul 2016 15:48:00 +0530</pubDate>
+        <link>
+        http://prerit2010.github.io//GSoC-Project-Front-end-weekly-update</link>
+        <guid isPermaLink="true">http://prerit2010.github.io//GSoC-Project-Front-end-weekly-update</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>GSoC 2016 Project - Front end and split script</title>
         
           <description>&lt;p&gt;I have decided to use &lt;a href=&quot;https://plot.ly/javascript/&quot;&gt;plotly.js&lt;/a&gt; primarily for plotting the graphs, but as it hardly matters, I can use other libraries as well as per the requirements. To start with, I added a graph for number of users using different operating systems, and most failed installs packages till date.&lt;/p&gt;

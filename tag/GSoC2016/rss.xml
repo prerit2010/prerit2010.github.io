@@ -12,6 +12,52 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>GSoC 2016 Project - Front end weekly update</title>
+	  <link>//GSoC-Project-Front-end-weekly-update</link>
+	  <author>prerit2010</author>
+	  <pubDate>2016-07-12T15:48:00+05:30</pubDate>
+	  <guid>//GSoC-Project-Front-end-weekly-update</guid>
+	  <description><![CDATA[
+	     <p>Front end work is on its way. I have created 3 endpoints as of now.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">/view/</code> : This shows the charts for all the workshops without any filtering. Currently I have added just 2 charts :
+    <ul>
+      <li>One for different OS users across all the workshops</li>
+      <li>Other for most failed packages across all the workshops.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>There is one problem with the second one, as the number of failed packages can be too much, all of them are not showing up, we may have to zoom in the chart to view all of them, and there is difficulty in reading the names :</p>
+
+<p><img src="http://i.imgur.com/95F6CCh.png" alt="image" /></p>
+
+<p>One solution is to keep the bar chart horizontal. But as the version names in some cases are too long, a lot of margin is needed in the left side of the graph. So maybe we can cut short the version names in case they are long.</p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">/view/&lt;workshop_id&gt;/</code> : This show the results only for a particular workshop. I have also provided a dropdown of a list of workshops, selecting one of which leads to this endpoint with charts only for this workshop.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">/view/detail/</code> : I have also provided a dropdown list of failed packages, selecting one of which hits this endpoint and shows the environment details, like what operating system or environment was used during testing of that failed package. Currently only json is returned.</p>
+  </li>
+</ul>
+
+<p>In all of the above endpoints, there is an option to export the data into json. For example : <code class="highlighter-rouge">/view/?export=json</code></p>
+
+<ul>
+  <li>While we are on the page of a particular workshop, when we select one of the failed packages from the dropdown list, it shows the details of that workshop only. I have also added a checkbox by which we can get details about all the workshops if we want. This checkbox appears only when we are at <code class="highlighter-rouge">/view/&lt;workshop_id&gt;</code>, and not on <code class="highlighter-rouge">/view/</code>.</li>
+</ul>
+
+<p><img src="http://imgur.com/JWyfPeg.png" alt="image" /></p>
+
+<p>On hitting submit button leads to <code class="highlighter-rouge">/view/detail/?...</code> and displays the details about systems used during testing of that package.</p>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>GSoC 2016 Project - Front end and split script</title>
 	  <link>//GSoC-Project-front-end-and-split-script</link>
 	  <author>prerit2010</author>

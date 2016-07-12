@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>GSoC 2016 Project - Front end and split script</title>
+    <title>GSoC 2016 Project - Front end weekly update</title>
     <meta name="description" content="Going Distances on One Boat! - A blog by Prerit Garg." />
 
     <meta name="HandheldFriendly" content="True" />
@@ -107,10 +107,10 @@
     <article class="post tag-GSoC2016">
 
         <header class="post-header">
-            <h1 class="post-title">GSoC 2016 Project - Front end and split script</h1>
+            <h1 class="post-title">GSoC 2016 Project - Front end weekly update</h1>
             <section class="post-meta">
             <!-- <a href='/'>prerit2010</a> -->
-            <time class="post-date" datetime="2016-07-05">05 Jul 2016</time>
+            <time class="post-date" datetime="2016-07-12">12 Jul 2016</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -125,86 +125,41 @@
 
         <section class="post-content">
             
-            <p>I have decided to use <a href="https://plot.ly/javascript/">plotly.js</a> primarily for plotting the graphs, but as it hardly matters, I can use other libraries as well as per the requirements. To start with, I added a graph for number of users using different operating systems, and most failed installs packages till date.</p>
+            <p>Front end work is on its way. I have created 3 endpoints as of now.</p>
 
 <ul>
-  <li>Here we have 2 cases to follow in case of failed installs packages.
+  <li><code class="highlighter-rouge">/view/</code> : This shows the charts for all the workshops without any filtering. Currently I have added just 2 charts :
     <ul>
-      <li>User may have run the script many times, and so all the attempts are saved. So one case is to show the graph on the basis of all the data (including all attempts of a user).</li>
-      <li>Other case is to have the graph show only the latest attempt. So, we would like to have a toggle button to switch on “Only latest attempt”, or switch it off to show all the data.</li>
+      <li>One for different OS users across all the workshops</li>
+      <li>Other for most failed packages across all the workshops.</li>
     </ul>
   </li>
-  <li>
-    <p>The graphs should also be filtered on the basis of workshop. We can have a dropdown containing a list of all the workshops, and selecting one of which will lead to filtering the data for that workshop ONLY.</p>
-  </li>
-  <li>
-    <p><a href="https://github.com/rgaiacs">Raniere</a> pointed out to have raw json as well in place for the information that we are going to display. For example : <a href="">http://installation.software-carpentry.org/view/?export=json</a>. So we can have the json formatted data for all the information that we tend to receive, and just use this json to display charts in the HTML pages as well.</p>
-  </li>
-  <li>
-    <p>Project was initially built on python 2.7 (I don’t know why didn’t I use python3 from the beginning :p), but now I have migrated it to python 3.5. It didn’t require a lot of tasks, just some fixes in importing the files.</p>
-  </li>
-  <li>In the installation test scripts, 2 more command line options have been added :
-    <ul>
-      <li><code class="highlighter-rouge">-H</code> to specify the HOST name to which the data should be submitted. for example : <code class="highlighter-rouge">python swc-main.py -H 127.0.0.1:5000</code>.</li>
-      <li><code class="highlighter-rouge">-n</code> to turn off sending data to server. e.g : <code class="highlighter-rouge">python swc-main.py -n</code></li>
-    </ul>
-  </li>
-  <li>
-    <p>Changed the name of “key.txt” file to ‘.swc_submission_id’, as now it would remain hidden, and having <strong>swc</strong> in the file name tells that it belongs to software carpentry.</p>
-  </li>
-  <li><a href="https://github.com/pbanaszkiewicz">Piotr</a> suggested to split the long script, and having something like :</li>
 </ul>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requirements_check</span>
-<span class="kn">import</span> <span class="nn">api</span> <span class="kn">as</span> <span class="nn">API</span>
+<p>There is one problem with the second one, as the number of failed packages can be too much, all of them are not showing up, we may have to zoom in the chart to view all of them, and there is difficulty in reading the names :</p>
 
-<span class="n">REQUIRED</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s">'python&gt;=3.5'</span><span class="p">,</span>
-    <span class="s">'numpy'</span><span class="p">,</span>
-<span class="p">]</span>
+<p><img src="http://i.imgur.com/95F6CCh.png" alt="image" /></p>
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
-    <span class="n">errors</span><span class="p">,</span> <span class="n">passed</span> <span class="o">=</span> <span class="n">requirements_check</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">REQUIRED</span><span class="p">)</span>
+<p>One solution is to keep the bar chart horizontal. But as the version names in some cases are too long, a lot of margin is needed in the left side of the graph. So maybe we can cut short the version names in case they are long.</p>
 
-    <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">errors</span><span class="p">:</span>
-        <span class="c"># communicate error to the user</span>
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">/view/&lt;workshop_id&gt;/</code> : This show the results only for a particular workshop. I have also provided a dropdown of a list of workshops, selecting one of which leads to this endpoint with charts only for this workshop.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">/view/detail/</code> : I have also provided a dropdown list of failed packages, selecting one of which hits this endpoint and shows the environment details, like what operating system or environment was used during testing of that failed package. Currently only json is returned.</p>
+  </li>
+</ul>
 
-        <span class="c"># gives user a pointer on what to do when something fails</span>
-        <span class="n">solution</span> <span class="o">=</span> <span class="n">requirements_check</span><span class="o">.</span><span class="n">solution</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+<p>In all of the above endpoints, there is an option to export the data into json. For example : <code class="highlighter-rouge">/view/?export=json</code></p>
 
-        <span class="k">pass</span>
+<ul>
+  <li>While we are on the page of a particular workshop, when we select one of the failed packages from the dropdown list, it shows the details of that workshop only. I have also added a checkbox by which we can get details about all the workshops if we want. This checkbox appears only when we are at <code class="highlighter-rouge">/view/&lt;workshop_id&gt;</code>, and not on <code class="highlighter-rouge">/view/</code>.</li>
+</ul>
 
-    <span class="c"># check if user agrees to submit their data</span>
-    <span class="n">agreement</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">'...'</span><span class="p">)</span>
-    <span class="n">submition_id</span> <span class="o">=</span> <span class="n">API</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">errors</span><span class="p">,</span> <span class="n">passed</span><span class="p">)</span>
+<p><img src="http://imgur.com/JWyfPeg.png" alt="image" /></p>
 
-    <span class="c"># add logic for working with the submition_id</span>
-    <span class="k">pass</span>
-
-    <span class="c"># logic for submitting workshop name and email</span>
-    <span class="k">pass</span>
-</code></pre>
-</div>
-
-<p>So that’s what I have done. I have separated the code for <strong>API</strong>, <strong>requirements_check</strong> and running the script. Also there used to be 2 scripts, 1 for checking the python version, and the other for checking the other requirements. But now, I have merged the first script in the second. So previous structure was :</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>|__/swc-setup-installation-test
-	|--swc-installation-test-1.py
-	|--swc-installation-test-2.py
-</code></pre>
-</div>
-<p>But now it is :</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>|__/swc-setup-installation-test
-	|--api.py
-	|--requirements_checks.py
-	|--swc-main.py
-</code></pre>
-</div>
-
-<p><code class="highlighter-rouge">swc-main.py</code> is the only script that needs to be run. It imports <strong>api</strong> and <strong>requirements_checks</strong> for checking the installation dependencies and sending them to server.</p>
-
-<p>It looks good as of now, a lot of documentation is required to be done though.</p>
+<p>On hitting submit button leads to <code class="highlighter-rouge">/view/detail/?...</code> and displays the details about systems used during testing of that package.</p>
 
 
         </section>
@@ -249,21 +204,14 @@
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-weekly-update">
+        <a class="read-next-story prev " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-front-end-and-split-script">
             <section class="post">
-                <h2>GSoC 2016 Project - Weekly update</h2>
-                <p>Added Travis-CI integration in the API. Now at each commit I make on github, Travis...</p>
+                <h2>GSoC 2016 Project - Front end and split script</h2>
+                <p>I have decided to use plotly.js primarily for plotting the graphs, but as it hardly...</p>
             </section>
         </a>
     
 
-    
-        <a class="read-next-story " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-Front-end-weekly-update">
-            <section class="post">
-                <h2>GSoC 2016 Project - Front end weekly update</h2>
-                <p>Front end work is on its way. I have created 3 endpoints as of now....</p>
-            </section>
-        </a>
     
     <!-- [[! /prev_post ]] -->
 </aside>
