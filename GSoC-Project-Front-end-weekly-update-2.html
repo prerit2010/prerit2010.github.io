@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>GSoC 2016 Project - Front end weekly update</title>
+    <title>GSoC 2016 Project - Front end weekly update 2.0</title>
     <meta name="description" content="Going Distances on One Boat! - A blog by Prerit Garg." />
 
     <meta name="HandheldFriendly" content="True" />
@@ -107,10 +107,10 @@
     <article class="post tag-GSoC2016">
 
         <header class="post-header">
-            <h1 class="post-title">GSoC 2016 Project - Front end weekly update</h1>
+            <h1 class="post-title">GSoC 2016 Project - Front end weekly update 2.0</h1>
             <section class="post-meta">
             <!-- <a href='/'>prerit2010</a> -->
-            <time class="post-date" datetime="2016-07-12">12 Jul 2016</time>
+            <time class="post-date" datetime="2016-07-20">20 Jul 2016</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -125,41 +125,32 @@
 
         <section class="post-content">
             
-            <p>Front end work is on its way. I have created 3 endpoints as of now.</p>
-
-<ul>
-  <li><code class="highlighter-rouge">/view/</code> : This shows the charts for all the workshops without any filtering. Currently I have added just 2 charts :
-    <ul>
-      <li>One for different OS users across all the workshops</li>
-      <li>Other for most failed packages across all the workshops.</li>
-    </ul>
-  </li>
-</ul>
-
-<p>There is one problem with the second one, as the number of failed packages can be too much, all of them are not showing up, we may have to zoom in the chart to view all of them, and there is difficulty in reading the names :</p>
-
-<p><img src="http://i.imgur.com/95F6CCh.png" alt="image" /></p>
-
-<p>One solution is to keep the bar chart horizontal. But as the version names in some cases are too long, a lot of margin is needed in the left side of the graph. So maybe we can cut short the version names in case they are long.</p>
-
-<ul>
+            <ul>
   <li>
-    <p><code class="highlighter-rouge">/view/&lt;workshop_id&gt;/</code> : This show the results only for a particular workshop. I have also provided a dropdown of a list of workshops, selecting one of which leads to this endpoint with charts only for this workshop.</p>
+    <p>The endpoint <code class="highlighter-rouge">/view/detail/</code> initially returned only json. I have created the front-end for the same. Several details like operating system used, linux distribution, platform etc were to be shown. I chose to show charts only for operating systems and python version used, and rest all shall be shown in a <strong>tabular</strong> form.</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">/view/detail/</code> : I have also provided a dropdown list of failed packages, selecting one of which hits this endpoint and shows the environment details, like what operating system or environment was used during testing of that failed package. Currently only json is returned.</p>
+    <p>Also, for all the charts, I have also added an option to view the data in the tabular form. When the button is clicked, the tables expand and the data can be viewed in tabular form as well.</p>
+  </li>
+  <li>
+    <p>As there are a lot failed packages, the list is huge, and thus the graph doesn’t show all the values, but it selects some of those to be viewed. In order to see the hidden values, one can zoom in the graph and take a closer look at it.</p>
+  </li>
+  <li>
+    <p><a href="https://github.com/rgaiacs">Raniere</a> suggested to limit this graph upto top 10 failed packages, and expand the view to all the packages on user’s request. This seems quite legitimate, and I will work upon it.</p>
+  </li>
+  <li>
+    <p>The <code class="highlighter-rouge">linux_distribution_name</code> and <code class="highlighter-rouge">version</code> are properties valid only for linux. On Mac and Windows, these values are returned as empty strings. And thus, in the chart of linux distribution name and version, data count was also being displayed for the empty strings. This was a quick fix issue.</p>
+  </li>
+  <li>
+    <p>Raniere suggested to have both the dropdowns (filter by workshop and filter by package name) at one place (at the top). This also didn’t require to have that checkbox for showing data for all workshops. Neat :-)</p>
+  </li>
+  <li>
+    <p>Meanwhile, there was also a requirement for creating a <strong>sample database</strong> to test the interface. So I created a command in <code class="highlighter-rouge">manage.py</code> to import the database. I did this using <code class="highlighter-rouge">SQL</code> file. The <code class="highlighter-rouge">sample.sql</code> file contains the SQL insert queries, and these are used to insert the data in the database after the database is created. In case the user wants to overwrite the data, and refresh it with previous sample data, <code class="highlighter-rouge">--overwrite</code> option can be used with the command <code class="highlighter-rouge">import_db</code>.</p>
+  </li>
+  <li>
+    <p>One important feature to be implemented is the integration of <strong>attempts</strong> with failed packages. Currently data is returned for all the attempts. <a href="https://github.com/pbanaszkiewicz">Piotr</a> suggested to have a <strong>toggle button</strong> to switch all attempts on and off. If all attempts button is switched on, data is shown for all the attempts of all users. While if it is in off state, only the latest attempt is considered.</p>
   </li>
 </ul>
-
-<p>In all of the above endpoints, there is an option to export the data into json. For example : <code class="highlighter-rouge">/view/?export=json</code></p>
-
-<ul>
-  <li>While we are on the page of a particular workshop, when we select one of the failed packages from the dropdown list, it shows the details of that workshop only. I have also added a checkbox by which we can get details about all the workshops if we want. This checkbox appears only when we are at <code class="highlighter-rouge">/view/&lt;workshop_id&gt;</code>, and not on <code class="highlighter-rouge">/view/</code>.</li>
-</ul>
-
-<p><img src="http://imgur.com/JWyfPeg.png" alt="image" /></p>
-
-<p>On hitting submit button leads to <code class="highlighter-rouge">/view/detail/?...</code> and displays the details about systems used during testing of that package.</p>
 
 
         </section>
@@ -204,21 +195,14 @@
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-front-end-and-split-script">
+        <a class="read-next-story prev " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-Front-end-weekly-update">
             <section class="post">
-                <h2>GSoC 2016 Project - Front end and split script</h2>
-                <p>I have decided to use plotly.js primarily for plotting the graphs, but as it hardly...</p>
+                <h2>GSoC 2016 Project - Front end weekly update</h2>
+                <p>Front end work is on its way. I have created 3 endpoints as of now....</p>
             </section>
         </a>
     
 
-    
-        <a class="read-next-story " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-Front-end-weekly-update-2">
-            <section class="post">
-                <h2>GSoC 2016 Project - Front end weekly update 2.0</h2>
-                <p>* The endpoint `/view/detail/` initially returned only json. I have created the front-end for the...</p>
-            </section>
-        </a>
     
     <!-- [[! /prev_post ]] -->
 </aside>

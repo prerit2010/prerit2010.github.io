@@ -8,6 +8,23 @@
     
       
       <item>
+        <title>GSoC 2016 Project - Front end weekly update 2.0</title>
+        
+          <description>&lt;ul&gt;
+  &lt;li&gt;The endpoint &lt;code class=&quot;highlighter-rouge&quot;&gt;/view/detail/&lt;/code&gt; initially returned only json. I have created the front-end for the same. Several details like operating system used, linux distribution, platform etc were to be shown. I chose to show charts only for operating systems and python version used, and rest all shall be shown in a &lt;strong&gt;tabular&lt;/strong&gt; form.&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        
+        <pubDate>Wed, 20 Jul 2016 15:48:00 +0530</pubDate>
+        <link>
+        http://prerit2010.github.io//GSoC-Project-Front-end-weekly-update-2</link>
+        <guid isPermaLink="true">http://prerit2010.github.io//GSoC-Project-Front-end-weekly-update-2</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>GSoC 2016 Project - Front end weekly update</title>
         
           <description>&lt;p&gt;Front end work is on its way. I have created 3 endpoints as of now.&lt;/p&gt;
