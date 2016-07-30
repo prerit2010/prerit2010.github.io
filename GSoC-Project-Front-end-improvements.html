@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>GSoC 2016 Project - Front end weekly update 2.0</title>
+    <title>GSoC 2016 Project - Front end improvements</title>
     <meta name="description" content="Going Distances on One Boat! - A blog by Prerit Garg." />
 
     <meta name="HandheldFriendly" content="True" />
@@ -107,10 +107,10 @@
     <article class="post tag-GSoC2016">
 
         <header class="post-header">
-            <h1 class="post-title">GSoC 2016 Project - Front end weekly update 2.0</h1>
+            <h1 class="post-title">GSoC 2016 Project - Front end improvements</h1>
             <section class="post-meta">
             <!-- <a href='/'>prerit2010</a> -->
-            <time class="post-date" datetime="2016-07-20">20 Jul 2016</time>
+            <time class="post-date" datetime="2016-07-29">29 Jul 2016</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -125,30 +125,32 @@
 
         <section class="post-content">
             
-            <ul>
+            <p>As only 2-3 weeks are left in the GSoC period, most of the major work has been done. Though some improvements are required, but these improvements will never come to end, as a software has always some room for improvements.</p>
+
+<ul>
+  <li>One of the major things left to be implemented was the integration of attempts with the results. Initially data was being shown for all attempts of each user. Now I have added a toggle button to switch between latest attempt and all attempts. By default it remains in off state, i.e. latest attempt state.</li>
+</ul>
+
+<p><img src="http://imgur.com/aMU95Zr.png" alt="image1" />  <img src="http://imgur.com/sOK7Fff.png" alt="image2" /></p>
+
+<ul>
+  <li>As the failed packages list is huge, and we need to visualize it in a graph, plotly selects some of the values to be displayed by default, and rest of those can be seen by zooming in the graph by drawing a box on it. But we are not be concerned to look at all the data in one go. So it’s better to have an option to show only top 10-12 results of failed packages. So I added a toggle button to switch between top 12 and all results. By default it shows only top 12.</li>
+</ul>
+
+<p><img src="http://imgur.com/RHOKVsb.png" alt="image3" /></p>
+
+<ul>
+  <li>Raniere suggested to have another plot for showing the list of failed packages grouped by only names, not version. It just required to query the database and grouping the packages by their names only.</li>
+</ul>
+
+<p><img src="http://imgur.com/E7ydu8s.png" alt="image4" /></p>
+
+<ul>
   <li>
-    <p>The endpoint <code class="highlighter-rouge">/view/detail/</code> initially returned only json. I have created the front-end for the same. Several details like operating system used, linux distribution, platform etc were to be shown. I chose to show charts only for operating systems and python version used, and rest all shall be shown in a <strong>tabular</strong> form.</p>
+    <p>There was an issue with the packages having version in the format like : <strong>2.7.10 (default, Oct 14 2015, 16:09:02) [GCC 5.2.1 20151010]</strong>. On clicking on these packages through the dropdown, they did not show any details on the <code class="highlighter-rouge">/view/detail/</code> page. The issue was because of the presence of ‘\n’ between <strong>2.7.10 (default, Oct 14 2015, 16:09:02)</strong>  and  <strong>[GCC 5.2.1 20151010]</strong>. When they were selected from the dropdown, ‘\n’ was converted to ‘\r\n’. And thus it did not match with any entry in the database. So I removed the ‘\n’ from the package versions when they are received in the request from installation test scripts.</p>
   </li>
   <li>
-    <p>Also, for all the charts, I have also added an option to view the data in the tabular form. When the button is clicked, the tables expand and the data can be viewed in tabular form as well.</p>
-  </li>
-  <li>
-    <p>As there are a lot failed packages, the list is huge, and thus the graph doesn’t show all the values, but it selects some of those to be viewed. In order to see the hidden values, one can zoom in the graph and take a closer look at it.</p>
-  </li>
-  <li>
-    <p><a href="https://github.com/rgaiacs">Raniere</a> suggested to limit this graph upto top 10 failed packages, and expand the view to all the packages on user’s request. This seems quite legitimate, and I will work upon it.</p>
-  </li>
-  <li>
-    <p>The <code class="highlighter-rouge">linux_distribution_name</code> and <code class="highlighter-rouge">version</code> are properties valid only for linux. On Mac and Windows, these values are returned as empty strings. And thus, in the chart of linux distribution name and version, data count was also being displayed for the empty strings. This was a quick fix issue.</p>
-  </li>
-  <li>
-    <p>Raniere suggested to have both the dropdowns (filter by workshop and filter by package name) at one place (at the top). This also didn’t require to have that checkbox for showing data for all workshops. Neat :-)</p>
-  </li>
-  <li>
-    <p>Meanwhile, there was also a requirement for creating a <strong>sample database</strong> to test the interface. So I created a command in <code class="highlighter-rouge">manage.py</code> to import the database. I did this using <code class="highlighter-rouge">SQL</code> file. The <code class="highlighter-rouge">sample.sql</code> file contains the SQL insert queries, and these are used to insert the data in the database after the database is created. In case the user wants to overwrite the data, and refresh it with previous sample data, <code class="highlighter-rouge">--overwrite</code> option can be used with the command <code class="highlighter-rouge">import_db</code>.</p>
-  </li>
-  <li>
-    <p>One important feature to be implemented is the integration of <strong>attempts</strong> with failed packages. Currently data is returned for all the attempts. <a href="https://github.com/pbanaszkiewicz">Piotr</a> suggested to have a <strong>toggle button</strong> to switch all attempts on and off. If all attempts button is switched on, data is shown for all the attempts of all users. While if it is in off state, only the latest attempt is considered.</p>
+    <p>Earlier, <strong>all attempts</strong> and <strong>latest attempt</strong> was integrated only on the <code class="highlighter-rouge">/view/</code> page. But this was not consistent with the <code class="highlighter-rouge">/view/details/</code> page. So I added the parameter of all_attempts while requesting the details for that package. Now the details shown for the package are also attempts based.</p>
   </li>
 </ul>
 
@@ -195,21 +197,14 @@
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-Front-end-weekly-update">
+        <a class="read-next-story prev " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-Front-end-weekly-update-2">
             <section class="post">
-                <h2>GSoC 2016 Project - Front end weekly update</h2>
-                <p>Front end work is on its way. I have created 3 endpoints as of now....</p>
+                <h2>GSoC 2016 Project - Front end weekly update 2.0</h2>
+                <p>The endpoint /view/detail/ initially returned only json. I have created the front-end for the same....</p>
             </section>
         </a>
     
 
-    
-        <a class="read-next-story " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-Front-end-improvements">
-            <section class="post">
-                <h2>GSoC 2016 Project - Front end improvements</h2>
-                <p>As only 2-3 weeks are left in the GSoC period, most of the major work...</p>
-            </section>
-        </a>
     
     <!-- [[! /prev_post ]] -->
 </aside>
