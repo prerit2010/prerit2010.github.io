@@ -12,6 +12,56 @@
    <atom:link href="rss" rel="self" type="application/rss+xml" />
    
 	<item>
+	  <title>GSoC 2016 Project - Front end tests and updates</title>
+	  <link>//GSoC-Project-Front-end-tests-and-updates</link>
+	  <author>prerit2010</author>
+	  <pubDate>2016-08-07T15:48:00+05:30</pubDate>
+	  <guid>//GSoC-Project-Front-end-tests-and-updates</guid>
+	  <description><![CDATA[
+	     <p>As the end of Google Summer of code is quite near (2 weeks more), I proceeded towards more improvements in code writing and also testing. I covered the following things this week :</p>
+
+<ul>
+  <li>
+    <p>Added all the data retrieved from the database and from application into JSON. Earlier some of the parameters like <code class="highlighter-rouge">all_attempts</code>, <code class="highlighter-rouge">all_workshops</code> etc were not included in the raw JSON and were directly rendered in the html template. But now a single variable <code class="highlighter-rouge">response</code> contains all the data. And by providing <code class="highlighter-rouge">export=json</code> as the url parameter, one can retrieve all the data in JSON.</p>
+  </li>
+  <li>
+    <p>I had not written any test cases for <code class="highlighter-rouge">/view/detail/</code> while writing the code. So I added several unit test cases for this endpoint. Some of these were :</p>
+    <ul>
+      <li>Details of package for all attempts and all workshops.</li>
+      <li>Details of package for latest attempt and all workshops.</li>
+      <li>Details of package for all attempts and one workshops.</li>
+      <li>Details of package for latest attempt and one workshops.</li>
+      <li>Count of Workshops in the list on the <code class="highlighter-rouge">/view/</code> page.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>…and several more.</p>
+
+<ul>
+  <li>
+    <p>I was not following any coding standard till now. But now I have brought the code under PEP8 standards, and now it looks much better and cleaner.</p>
+  </li>
+  <li>
+    <p>I also got an idea of a plot for <code class="highlighter-rouge">/view/detail/</code> page. For each failed package there would be a time series plot, which would describe how much this package has been failing over the period of time.</p>
+  </li>
+</ul>
+
+<p><img src="http://imgur.com/ZZ7yH3e.png" alt="image" /></p>
+
+<ul>
+  <li>
+    <p>The above plot would be valid only for <strong>all workshops</strong> option. As for a single workshop, a failed package would be associated with a single date only. So I disabled this plot when details of failed package are queried only for a particular workshop.</p>
+  </li>
+  <li>
+    <p>AS suggested by <a href="https://github.com/rgaiacs">Raniere</a>, I have sent an email on the mailing list of software carpentry, and have asked for the feedback of instructors and other people in the community, so that I can work on the suggested changes in the coming 2 weeks.</p>
+  </li>
+</ul>
+
+	  ]]></description>
+	</item>
+
+	<item>
 	  <title>GSoC 2016 Project - Front end improvements</title>
 	  <link>//GSoC-Project-Front-end-improvements</link>
 	  <author>prerit2010</author>
@@ -461,44 +511,6 @@ will expire after 90 days. Initially I was worried about the performance of Virt
 </div>
 
 <p>I’ve my end semester exams coming up from 9 May, 2016, so will be occupied with that mostly from now on. Will post further updates soon! :)</p>
-
-	  ]]></description>
-	</item>
-
-	<item>
-	  <title>Hello World!</title>
-	  <link>//hello-world</link>
-	  <author>prerit2010</author>
-	  <pubDate>2016-04-26T15:48:00+05:30</pubDate>
-	  <guid>//hello-world</guid>
-	  <description><![CDATA[
-	     <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">print</span> <span class="s">'Hello World!'</span>
-</code></pre>
-</div>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="err">'</span><span class="n">Hello</span> <span class="n">World</span><span class="o">!</span><span class="err">'</span><span class="o">);</span>
-</code></pre>
-</div>
-
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"Hello World!"</span><span class="p">;</span>
-</code></pre>
-</div>
-
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">printf</span><span class="p">(</span><span class="s">"Hello World!"</span><span class="p">);</span>
-</code></pre>
-</div>
-
-<p>This is a convention followed by almost every programmer to start learning to code with a simple ‘Hello World’ program. Every tutorial, and nowadays every blog starts with Hello World. I prefer not to break this convention, and start by writing my first blogpost as ‘Hello World!’ :)</p>
-
-<p>For quite a long time I had been thinking to start writing blogposts, and had been developing my blog using flask web framework. But laziness or whatever you can say, delayed it. But as quoted by someone:</p>
-
-<blockquote>
-  <p>Necessity is the mother of invention!</p>
-</blockquote>
-
-<p>I have finally ended up using Github Pages for my blog.<br />And the Necessity is:	I need to write my <a href="https://summerofcode.withgoogle.com/">Google Summer of Code 2016</a> project progress as blog posts every 2 weeks :D.</p>
-
-<p>I’ll not only be writing about the projects or technical stuffs, but also about my life experiences.  So here we go! ;)</p>
 
 	  ]]></description>
 	</item>

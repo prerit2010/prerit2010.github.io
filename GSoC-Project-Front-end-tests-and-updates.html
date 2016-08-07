@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- [[! Page Meta ]] -->
-    <title>GSoC 2016 Project - Front end improvements</title>
+    <title>GSoC 2016 Project - Front end tests and updates</title>
     <meta name="description" content="Going Distances on One Boat! - A blog by Prerit Garg." />
 
     <meta name="HandheldFriendly" content="True" />
@@ -107,10 +107,10 @@
     <article class="post tag-GSoC2016">
 
         <header class="post-header">
-            <h1 class="post-title">GSoC 2016 Project - Front end improvements</h1>
+            <h1 class="post-title">GSoC 2016 Project - Front end tests and updates</h1>
             <section class="post-meta">
             <!-- <a href='/'>prerit2010</a> -->
-            <time class="post-date" datetime="2016-07-29">29 Jul 2016</time>
+            <time class="post-date" datetime="2016-08-07">07 Aug 2016</time>
                 <!-- [[tags prefix=" on "]] -->
                  
                 on 
@@ -125,32 +125,43 @@
 
         <section class="post-content">
             
-            <p>As only 2-3 weeks are left in the GSoC period, most of the major work has been done. Though some improvements are required, but these improvements will never come to end, as a software has always some room for improvements.</p>
-
-<ul>
-  <li>One of the major things left to be implemented was the integration of attempts with the results. Initially data was being shown for all attempts of each user. Now I have added a toggle button to switch between latest attempt and all attempts. By default it remains in off state, i.e. latest attempt state.</li>
-</ul>
-
-<p><img src="http://imgur.com/aMU95Zr.png" alt="image1" />  <img src="http://imgur.com/sOK7Fff.png" alt="image2" /></p>
-
-<ul>
-  <li>As the failed packages list is huge, and we need to visualize it in a graph, plotly selects some of the values to be displayed by default, and rest of those can be seen by zooming in the graph by drawing a box on it. But we are not be concerned to look at all the data in one go. So it’s better to have an option to show only top 10-12 results of failed packages. So I added a toggle button to switch between top 12 and all results. By default it shows only top 12.</li>
-</ul>
-
-<p><img src="http://imgur.com/RHOKVsb.png" alt="image3" /></p>
-
-<ul>
-  <li>Raniere suggested to have another plot for showing the list of failed packages grouped by only names, not version. It just required to query the database and grouping the packages by their names only.</li>
-</ul>
-
-<p><img src="http://imgur.com/E7ydu8s.png" alt="image4" /></p>
+            <p>As the end of Google Summer of code is quite near (2 weeks more), I proceeded towards more improvements in code writing and also testing. I covered the following things this week :</p>
 
 <ul>
   <li>
-    <p>There was an issue with the packages having version in the format like : <strong>2.7.10 (default, Oct 14 2015, 16:09:02) [GCC 5.2.1 20151010]</strong>. On clicking on these packages through the dropdown, they did not show any details on the <code class="highlighter-rouge">/view/detail/</code> page. The issue was because of the presence of ‘\n’ between <strong>2.7.10 (default, Oct 14 2015, 16:09:02)</strong>  and  <strong>[GCC 5.2.1 20151010]</strong>. When they were selected from the dropdown, ‘\n’ was converted to ‘\r\n’. And thus it did not match with any entry in the database. So I removed the ‘\n’ from the package versions when they are received in the request from installation test scripts.</p>
+    <p>Added all the data retrieved from the database and from application into JSON. Earlier some of the parameters like <code class="highlighter-rouge">all_attempts</code>, <code class="highlighter-rouge">all_workshops</code> etc were not included in the raw JSON and were directly rendered in the html template. But now a single variable <code class="highlighter-rouge">response</code> contains all the data. And by providing <code class="highlighter-rouge">export=json</code> as the url parameter, one can retrieve all the data in JSON.</p>
   </li>
   <li>
-    <p>Earlier, <strong>all attempts</strong> and <strong>latest attempt</strong> was integrated only on the <code class="highlighter-rouge">/view/</code> page. But this was not consistent with the <code class="highlighter-rouge">/view/details/</code> page. So I added the parameter of all_attempts while requesting the details for that package. Now the details shown for the package are also attempts based.</p>
+    <p>I had not written any test cases for <code class="highlighter-rouge">/view/detail/</code> while writing the code. So I added several unit test cases for this endpoint. Some of these were :</p>
+    <ul>
+      <li>Details of package for all attempts and all workshops.</li>
+      <li>Details of package for latest attempt and all workshops.</li>
+      <li>Details of package for all attempts and one workshops.</li>
+      <li>Details of package for latest attempt and one workshops.</li>
+      <li>Count of Workshops in the list on the <code class="highlighter-rouge">/view/</code> page.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>…and several more.</p>
+
+<ul>
+  <li>
+    <p>I was not following any coding standard till now. But now I have brought the code under PEP8 standards, and now it looks much better and cleaner.</p>
+  </li>
+  <li>
+    <p>I also got an idea of a plot for <code class="highlighter-rouge">/view/detail/</code> page. For each failed package there would be a time series plot, which would describe how much this package has been failing over the period of time.</p>
+  </li>
+</ul>
+
+<p><img src="http://imgur.com/ZZ7yH3e.png" alt="image" /></p>
+
+<ul>
+  <li>
+    <p>The above plot would be valid only for <strong>all workshops</strong> option. As for a single workshop, a failed package would be associated with a single date only. So I disabled this plot when details of failed package are queried only for a particular workshop.</p>
+  </li>
+  <li>
+    <p>AS suggested by <a href="https://github.com/rgaiacs">Raniere</a>, I have sent an email on the mailing list of software carpentry, and have asked for the feedback of instructors and other people in the community, so that I can work on the suggested changes in the coming 2 weeks.</p>
   </li>
 </ul>
 
@@ -197,21 +208,14 @@
     <!-- [[! /next_post ]] -->
     <!-- [[! prev_post ]] -->
     
-        <a class="read-next-story prev " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-Front-end-weekly-update-2">
+        <a class="read-next-story prev " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-Front-end-improvements">
             <section class="post">
-                <h2>GSoC 2016 Project - Front end weekly update 2.0</h2>
-                <p>The endpoint /view/detail/ initially returned only json. I have created the front-end for the same....</p>
+                <h2>GSoC 2016 Project - Front end improvements</h2>
+                <p>As only 2-3 weeks are left in the GSoC period, most of the major work...</p>
             </section>
         </a>
     
 
-    
-        <a class="read-next-story " style="background-image: url(/assets/images/gsoc2016-banner.png)" href="/GSoC-Project-Front-end-tests-and-updates">
-            <section class="post">
-                <h2>GSoC 2016 Project - Front end tests and updates</h2>
-                <p>As the end of Google Summer of code is quite near (2 weeks more), I...</p>
-            </section>
-        </a>
     
     <!-- [[! /prev_post ]] -->
 </aside>
