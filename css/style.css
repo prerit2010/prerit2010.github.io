@@ -58,6 +58,10 @@ span newb {
   color: #606060;
 }
 
+span newb2 {
+  text-align : left;
+}
+
 /*==================================================
                   SOCIAL-ICON
 ====================================================*/
@@ -546,13 +550,14 @@ span newb {
     background: #fff;
     text-align: right;
     float: left;
-    border: 1px solid transparent;
+    border: 1px solid ;
     position: relative;
     transition: all 0.3s ease 0s;
 }
 
 #award-box .award:hover .award-content {
     border: 1px solid #cfcdcd;
+    background: #F3EFEE;
 }
 
 #award-box .award-content:before {
